@@ -5,6 +5,7 @@ export interface User {
 export interface Project {
   id: string; user_id: string; name: string; description: string;
   status: "active" | "archived"; thumbnail_url: string | null;
+  pin_count: number; shared_emails: string[];
   created_at: string; updated_at: string;
 }
 
@@ -23,4 +24,9 @@ export interface Pin {
 export interface PinComment {
   id: string; pin_id: string; user_id: string; content: string;
   parent_id: string | null; edited_at: string | null; created_at: string;
+}
+
+export interface ActivityFeed {
+  id: string; project_id: string; user_id: string;
+  action: string; target: string | null; created_at: string;
 }

@@ -1,8 +1,9 @@
 # 🧬 ALMANAC — SEED
 
-> **Gerado pelo Reversa (reversa-spec-sdd) em 2026-05-30**
-> Status: ✅ PRONTO — Implementável por agente de IA
+> **Gerado pelo Reversa (reversa-spec-sdd) em 2026-05-30 — Atualizado em 2026-05-30**
+> Status: ✅ DEPLOYED — rodando em produção
 > Stack: Vercel + Supabase + Google Auth
+> Deploy URL: https://almanac-ex.vercel.app
 
 ---
 
@@ -352,14 +353,16 @@ CREATE POLICY "Anyone with link can read activity"
 ## 6. COMPONENTES DE UI
 
 ### 6.1 Landing Page (`/`)
-- Logotipo + nome "Almanac" centralizado
-- Botão "Entrar com Google" (grande, central)
-- Fundo clean, sem distrações
+- Fundo escuro (gradiente `#0b1a2e` → `#061220`) com partículas animadas (SparklesCore do 21st.dev via tsParticles)
+- Logotipo "Almanac" + versão `v1.0.5` centralizado
+- Botão "Entrar com Google" translúcido com backdrop-blur
+- Design dark exclusivo — login tem tema próprio, separado do resto do app (light)
 
 ### 6.2 Header (global após login)
-- Avatar circular (32px) + nome do usuário
-- Dropdown: "Sair"
-- Link "Dashboard"
+- Fundo branco, tema light com indigo
+- Logo "Almanac" + versão `v1.0.5`
+- 🔔 Notificação com badge (Realtime) + dropdown de atividades recentes
+- Avatar circular (28px) + nome do usuário + botão "Sair"
 
 ### 6.3 Dashboard (`/dashboard`)
 - Grid de cards dos projetos
@@ -370,15 +373,31 @@ CREATE POLICY "Anyone with link can read activity"
 
 ### 6.4 Tela do Projeto (`/projeto/:id`)
 - **Header:** Nome do projeto, seletor de versão, botão "Compartilhar"
-- **Canvas:** iframe com mockup renderizado
-- **Sidebar (opcional):** Lista de pins com preview
-- **Overlay Pins:** Marcadores sobre o iframe
-- **Modal Pin:** Comentário + área de replies + emojis + ações
+- **Canvas:** iframe com mockup renderizado, overlay para captura de cliques (drag detection de 5px para diferenciar scroll de click)
+- **Sidebar (opcional):** Abas "Comentários" e "Versões", responsiva (toggle ☰ no mobile)
+- **Overlay Pins:** Marcadores sobre o iframe com numeração sequencial (por `created_at`), clusterização em raio 2.5% com popup de lista
+- **Modal Pin:** Comentário + threads aninhadas + emojis + ações (resolver/reabrir/deletar)
+- **Ações:** Upload HTML (nova versão), Compartilhar (gerar link + gerenciar e-mails)
+- **🍃 Sombra verde giratória** em pin selecionado via `animate-spin-shadow`
 
 ### 6.5 Tela Compartilhada (`/compartilhado/:id`)
 - Mesma tela do projeto, sem header de edição
 - Visitante vê pins mas não pode criar
 - Clicar no mockup abre modal "Faça login para comentar"
+
+### 6.6 Temas
+- **Login:** Escuro (deep navy `#0b1a2e` → `#061220`) com partículas azuis animadas via tsParticles (SparklesCore do 21st.dev)
+- **Dashboard:** Light (fundo `bg-gray-50`, cards brancos, botões indigo)
+- **Projeto:** Light (fundo `bg-gray-50`, sidebar/camada branca, pins coloridos)
+- **Compartilhado:** Light (header branco, fundo `bg-gray-50`)
+- **Mobile Blocker:** Tema escuro com mensagem para abrir em tablet+ (≥768px)
+
+### 6.7 Funcionalidades de Qualidade de Vida
+- 🔔 Notificações em tempo real via Supabase Realtime (tabela `activity_feed`)
+- 📱 Bloqueio mobile com detecção de viewport (`window.innerWidth < 768`)
+- 🖱️ Scroll vs Click: detecção de arrasto (mousedown/mouseup com tolerância 5px)
+- 🎯 Cluster pins em raio configurável (2.5%) com popup de lista
+- 🏷️ Numeração de pins por ordem de criação (`created_at`)
 
 ---
 
@@ -522,15 +541,16 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon_key>
 
 Para ser aprovado no hackathon, o deploy **MUST** atender:
 
-- [ ] Login com Google funciona (redirect + sessão + logout)
-- [ ] Upload de HTML e renderização no iframe
-- [ ] Criar pin em ponto exato do mockup
-- [ ] Pin persiste após refresh
-- [ ] Link compartilhável funciona para usuário não logado
-- [ ] Visitante vê pins mas não pode criar (modal de login)
-- [ ] Histórico de projetos no dashboard
-- [ ] Deploy na Vercel com banco no Supabase
-- [ ] **Bônus (winner):** Threads, emojis, resolver/reabrir, pins arrastáveis, versões
+- [x] Login com Google funciona (redirect + sessão + logout)
+- [x] Upload de HTML e renderização no iframe
+- [x] Criar pin em ponto exato do mockup
+- [x] Pin persiste após refresh
+- [x] Link compartilhável funciona para usuário não logado
+- [x] Visitante vê pins mas não pode criar (modal de login)
+- [x] Histórico de projetos no dashboard
+- [x] Deploy na Vercel com banco no Supabase
+- [x] **Bônus:** Threads, emojis, resolver/reabrir, versões, notificações em tempo real, clusterização, responsivo (tablet+)
+- [x] **Bônus extra:** Login dark com partículas (SparklesCore 21st.dev), tema híbrido (login escuro / app light), sombra giratória em pin ativo, scroll vs click detection, mobile blocker
 
 ---
 
@@ -574,7 +594,11 @@ Para ser aprovado no hackathon, o deploy **MUST** atender:
 
 ---
 
-> 🏆 **Boa sorte, SextaFeira! Esta SEED está pronta para a IA construir o Almanac do zero.**
+> 🏆 **Almanac está em produção!** https://almanac-ex.vercel.app
+>
+> **Login dark com partículas (SparklesCore do 21st.dev) | App light | Cluster pins | Notificações Realtime**
+>
+> **Última build:** 2026-05-30 — Next.js 16.2.6, tsParticles 4.1.0, Supabase, Vercel
 >
 > **Gerado automaticamente pelo Reversa Framework — Time Code New Project Agents**
 > **Componentes:** reversa-ideator → reversa-researcher → reversa-drafter → reversa-spec-sdd
