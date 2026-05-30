@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Almanac
 
-## Getting Started
+Colaboração visual com feedbacks ancorados em mockups HTML.
 
-First, run the development server:
+## Stack
+
+- **Frontend:** Next.js + TypeScript + Tailwind
+- **Auth:** Supabase Auth (Google OAuth)
+- **Banco:** Supabase PostgreSQL
+- **Storage:** Supabase Storage
+- **Deploy:** Vercel
+
+## Setup Local
 
 ```bash
+# 1. Clonar
+git clone https://github.com/HicaroDev/Almanac_ex.git
+cd Almanac_ex
+
+# 2. Instalar dependências
+npm install
+
+# 3. Configurar .env.local (copie .env.example e preencha)
+cp .env.example .env.local
+
+# 4. Rodar seed.sql no SQL Editor do Supabase Dashboard
+
+# 5. Iniciar dev
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variáveis de Ambiente
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_anon_key
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Configuração Supabase
 
-## Learn More
+1. **Auth → Providers → Google:** Ativar + configurar Client ID/Secret
+2. **SQL Editor:** Rodar `seed.sql`
+3. **Storage:** Criar bucket `mockups` (público)
+4. **Realtime:** Habilitar para tabelas `pins`, `pin_comments`, `activity_feed`
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy na Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Conectar repositório GitHub
+2. Adicionar env vars do `.env.local`
+3. Deploy automático na branch `main`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Estrutura
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/
+│   ├── page.tsx                    # Landing + Login
+│   ├── dashboard/                  # Lista de projetos
+│   ├── projeto/[id]/               # Mockup + Pins
+│   ├── compartilhado/[id]/         # Link público
+│   └── auth/callback/              # Callback OAuth
+├── components/
+│   ├── auth-provider.tsx           # Contexto de auth
+│   └── header.tsx                  # Header global
+└── lib/
+    ├── supabase.ts                 # Cliente browser
+    ├── supabase-server.ts          # Cliente server
+    └── types.ts                    # Tipos TS
+```

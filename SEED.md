@@ -550,7 +550,71 @@ Para ser aprovado no hackathon, o deploy **MUST** atender:
 
 ---
 
-## 14. ENTREGAVEIS DO HACKATHON (Lembrete)
+## 14. EXEMPLOS DE API RESPONSE (JSON)
+
+### Supabase Auth — Sessão
+```json
+{
+  "user": { "id": "uuid", "email": "mary@email.com", "user_metadata": { "full_name": "Mary", "avatar_url": "https://..." } },
+  "session": { "access_token": "jwt...", "expires_at": 1234567890 }
+}
+```
+
+### GET /api/projects — Lista de projetos
+```json
+[
+  {
+    "id": "uuid", "name": "Landing Page v2", "status": "active",
+    "pin_count": 5, "created_at": "2026-05-30T10:00:00Z"
+  }
+]
+```
+
+### POST /api/pins — Criar pin
+```json
+{
+  "id": "uuid", "x_percent": 45.5, "y_percent": 72.1,
+  "status": "open", "created_by": "uuid"
+}
+```
+
+### GET /api/pins?project_id=X — Lista de pins com comentários
+```json
+[
+  {
+    "id": "uuid", "x_percent": 45.5, "y_percent": 72.1,
+    "status": "open", "created_by": "uuid",
+    "comments": [{ "id": "uuid", "content": "Trocar cor do botão", "user_id": "uuid" }]
+  }
+]
+```
+
+---
+
+## 15. UI — DESCRIÇÃO DAS TELAS
+
+### Landing Page
+- Fundo gradiente azul-claro para indigo
+- Título "Almanac" grande (~5rem) centralizado
+- Subtítulo "Colabore em mockups HTML com feedbacks ancorados"
+- Botão branco com borda + ícone Google + "Entrar com Google"
+
+### Dashboard
+- Header com logo "Almanac" (esquerda) e avatar + nome + "Sair" (direita)
+- Abas de filtro: "Ativos" | "Arquivados" | "Todos"
+- Botão "+ Novo Projeto" no canto superior direito
+- Grid de cards (1-3 colunas responsivo)
+- Cada card: nome, badge de status, data, ações (arquivar)
+
+### Tela do Projeto
+- Header: nome do projeto + seletor de versão (dropdown) + Upload HTML + Compartilhar
+- Canvas: iframe ocupando o resto da tela
+- Sidebar direita (320px): abas "Comentários" e "Versões"
+- Pins: bolinhas coloridas sobrepostas ao iframe (laranja=aberto, verde=resolvido, azul=reaberto)
+
+---
+
+## 16. ENTREGAVEIS DO HACKATHON (Lembrete)
 
 1. **Link do GitHub:** Repositório contendo `SEED.md` + seed SQL + código
 2. **Link do Deploy:** URL Vercel funcionando com Supabase
