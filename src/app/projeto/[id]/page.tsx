@@ -154,6 +154,13 @@ export default function ProjectPage() {
           <button onClick={() => setShowShare(true)} className="px-3 py-1.5 text-sm bg-white border rounded-lg hover:bg-gray-50">
             Compartilhar
           </button>
+          <button onClick={async () => {
+            await supabase.from("projects").update({ status: project.status === "active" ? "archived" : "active" }).eq("id", id);
+            setProject({ ...project, status: project.status === "active" ? "archived" : "active" });
+            router.push("/dashboard");
+          }} className="px-3 py-1.5 text-sm bg-white border rounded-lg hover:bg-gray-50 text-gray-600">
+            {project.status === "active" ? "Arquivar" : "Desarquivar"}
+          </button>
         </div>
       </div>
 
