@@ -126,16 +126,13 @@ CREATE TABLE versions (
 
 ALTER TABLE versions ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Project members can read versions"
+CREATE POLICY "Anyone can read versions"
   ON versions FOR SELECT
-  USING (
-    user_id = auth.uid() OR
-    EXISTS (SELECT 1 FROM project_shares WHERE project_id = versions.project_id)
-  );
+  USING (true);
 
-CREATE POLICY "Owners can insert versions"
+CREATE POLICY "Authenticated users can insert versions"
   ON versions FOR INSERT
-  WITH CHECK (created_by = auth.uid());
+  WITH CHECK (auth.uid() IS NOT NULL);
 ```
 
 #### `pins`
@@ -469,17 +466,33 @@ NEXT_PUBLIC_BASE_URL=<vercel_deploy_url>
 
 ## 10. DEPLOY (Vercel) — MUST
 
-### Configuração:
-1. Conectar repositório GitHub à Vercel
-2. Framework preset conforme stack escolhida (Next.js, etc.)
-3. Adicionar variáveis de ambiente acima
-4. Deploy automático na branch `main`
+### Pré-requisitos:
+- Repositório no GitHub com o código
+- Conta na Vercel conectada ao GitHub
+- Projeto Supabase ativo
+
+### Passo a passo (passo 1 a 5 no Supabase Dashboard, passo 6 na Vercel):
+
+1. **SQL Editor:** Executar `seed.sql` (cria tabelas, RLS, triggers, Realtime)
+2. **Auth:** Ativar Google → Client ID + Secret do Google Cloud Console
+3. **URL Configuration:** Site URL = URL do deploy Vercel, Redirect URLs = `{vercel_url}/auth/callback`
+4. **Storage:** Criar bucket `mockups` → público SELECT, autenticado INSERT
+5. **Realtime:** Habilitar replicação nas tabelas `pins`, `pin_comments`, `activity_feed`
+6. **Vercel:** Novo projeto → importar repositório → Framework = Next.js → adicionar env vars abaixo → Deploy
+
+> ⚠️ **Imprevistos comuns no deploy:** Veja `config.md` para troubleshooting detalhado (erro de middleware, redirect loop, OAuth config, build cache).
+
+### Variáveis de ambiente (Vercel):
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://<projeto>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon_key>
+```
 
 ### Scripts:
 ```json
 {
-  "build": "comando de build da stack escolhida",
-  "dev": "comando de dev da stack escolhida"
+  "build": "npm run build",
+  "dev": "npm run dev"
 }
 ```
 
@@ -489,8 +502,10 @@ NEXT_PUBLIC_BASE_URL=<vercel_deploy_url>
 
 ### Auth:
 1. Ativar provedor Google no Supabase Dashboard
-2. Configurar Redirect URLs: `{vercel_url}/auth/callback`, `http://localhost:3000/auth/callback`
-3. Desabilitar sign-ups por email/senha (apenas Google)
+2. No Google Cloud Console: Authorized redirect URIs = `https://<projeto>.supabase.co/auth/v1/callback`
+3. No Supabase Auth: Site URL = URL do deploy Vercel
+4. No Supabase Auth: Redirect URLs = `{vercel_url}/auth/callback`, `http://localhost:3000/auth/callback`
+5. Desabilitar sign-ups por email/senha (apenas Google)
 
 ### Storage:
 1. Criar bucket `mockups`
@@ -545,78 +560,15 @@ Para ser aprovado no hackathon, o deploy **MUST** atender:
 ├── public/
 ├── .env.local
 ├── seed.sql
+├── config.md
 └── README.md
 ```
 
 ---
 
-## 14. EXEMPLOS DE API RESPONSE (JSON)
+## 14. ENTREGAVEIS DO HACKATHON (Lembrete)
 
-### Supabase Auth — Sessão
-```json
-{
-  "user": { "id": "uuid", "email": "mary@email.com", "user_metadata": { "full_name": "Mary", "avatar_url": "https://..." } },
-  "session": { "access_token": "jwt...", "expires_at": 1234567890 }
-}
-```
-
-### GET /api/projects — Lista de projetos
-```json
-[
-  {
-    "id": "uuid", "name": "Landing Page v2", "status": "active",
-    "pin_count": 5, "created_at": "2026-05-30T10:00:00Z"
-  }
-]
-```
-
-### POST /api/pins — Criar pin
-```json
-{
-  "id": "uuid", "x_percent": 45.5, "y_percent": 72.1,
-  "status": "open", "created_by": "uuid"
-}
-```
-
-### GET /api/pins?project_id=X — Lista de pins com comentários
-```json
-[
-  {
-    "id": "uuid", "x_percent": 45.5, "y_percent": 72.1,
-    "status": "open", "created_by": "uuid",
-    "comments": [{ "id": "uuid", "content": "Trocar cor do botão", "user_id": "uuid" }]
-  }
-]
-```
-
----
-
-## 15. UI — DESCRIÇÃO DAS TELAS
-
-### Landing Page
-- Fundo gradiente azul-claro para indigo
-- Título "Almanac" grande (~5rem) centralizado
-- Subtítulo "Colabore em mockups HTML com feedbacks ancorados"
-- Botão branco com borda + ícone Google + "Entrar com Google"
-
-### Dashboard
-- Header com logo "Almanac" (esquerda) e avatar + nome + "Sair" (direita)
-- Abas de filtro: "Ativos" | "Arquivados" | "Todos"
-- Botão "+ Novo Projeto" no canto superior direito
-- Grid de cards (1-3 colunas responsivo)
-- Cada card: nome, badge de status, data, ações (arquivar)
-
-### Tela do Projeto
-- Header: nome do projeto + seletor de versão (dropdown) + Upload HTML + Compartilhar
-- Canvas: iframe ocupando o resto da tela
-- Sidebar direita (320px): abas "Comentários" e "Versões"
-- Pins: bolinhas coloridas sobrepostas ao iframe (laranja=aberto, verde=resolvido, azul=reaberto)
-
----
-
-## 16. ENTREGAVEIS DO HACKATHON (Lembrete)
-
-1. **Link do GitHub:** Repositório contendo `SEED.md` + seed SQL + código
+1. **Link do GitHub:** Repositório contendo `SEED.md` + `config.md` + `seed.sql` + código
 2. **Link do Deploy:** URL Vercel funcionando com Supabase
 3. **Vídeo de Demonstração:** Mostrando login, upload, pins, compartilhamento
 
