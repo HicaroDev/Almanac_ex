@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup Teste - Almanac</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, sans-serif; }
+    body { background: #f5f5f5; padding: 40px; }
+    .header { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 48px; border-radius: 16px; margin-bottom: 32px; }
+    .header h1 { font-size: 36px; margin-bottom: 8px; }
+    .header p { font-size: 18px; opacity: 0.9; }
+    .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .card h2 { font-size: 20px; color: #333; margin-bottom: 12px; }
+    .card p { color: #666; line-height: 1.6; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .feature { background: white; border-radius: 12px; padding: 24px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .feature .icon { font-size: 40px; margin-bottom: 12px; }
+    .feature h3 { font-size: 16px; color: #333; margin-bottom: 8px; }
+    .feature p { font-size: 14px; color: #666; }
+    .btn { display: inline-block; background: #6366f1; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    .btn:hover { background: #4f46e5; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Almanac</h1>
+    <p>Colabore em mockups HTML com feedbacks ancorados</p>
+    <br>
+    <a href="#" class="btn" style="background: white; color: #6366f1;">Começar agora</a>
+  </div>
+
+  <div class="card">
+    <h2>Bem-vindo ao Almanac!</h2>
+    <p>Este é um mockup de exemplo para testar a funcionalidade de upload de HTML. Você pode criar pins clicando em qualquer ponto da tela, compartilhar com sua equipe e gerenciar versões.</p>
+  </div>
+
+  <div class="grid">
+    <div class="feature">
+      <div class="icon">📤</div>
+      <h3>Upload de HTML</h3>
+      <p>Envie seus mockups em formato HTML</p>
+    </div>
+    <div class="feature">
+      <div class="icon">📌</div>
+      <h3>Feedback Ancorado</h3>
+      <p>Deixe comentários em pontos exatos</p>
+    </div>
+    <div class="feature">
+      <div class="icon">👥</div>
+      <h3>Compartilhamento</h3>
+      <p>Compartilhe com sua equipe</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-left: 4px solid #6366f1;">
+    <h2>🚀 Pronto para testar?</h2>
+    <p>Clique em qualquer lugar desta página para criar um pin de feedback. Os pins persistem após recarregar a página.</p>
+  </div>
+</body>
+</html>

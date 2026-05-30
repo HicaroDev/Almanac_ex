@@ -171,7 +171,7 @@ export default function ProjectPage() {
       )}
 
       <div className="flex flex-1 overflow-hidden">
-        <div className="flex-1 relative" onClick={handleIframeClick}>
+        <div className="flex-1 relative">
           {currentVersion ? (
             <>
               {!iframeLoaded && (
@@ -181,7 +181,9 @@ export default function ProjectPage() {
               )}
               <iframe ref={iframeRef} onLoad={() => setIframeLoaded(true)}
                 src={supabase.storage.from("mockups").getPublicUrl(currentVersion.storage_path).data.publicUrl}
-                className="w-full h-full border-0" sandbox="allow-same-origin" />
+                className="w-full h-full border-0" sandbox="allow-same-origin"
+                style={{ pointerEvents: "none" }} />
+              <div className="absolute inset-0 cursor-crosshair" onClick={handleIframeClick} />
             </>
           ) : (
             <div className="flex items-center justify-center h-full text-gray-400">
