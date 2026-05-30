@@ -111,7 +111,7 @@ export default function ProjectPage() {
       if (!file || file.size > 10 * 1024 * 1024) { alert("Arquivo muito grande (max 10MB)"); return; }
       const versionNumber = versions.length > 0 ? versions[0].version_number + 1 : 1;
       const path = `${user!.id}/${id}/v${versionNumber}.html`;
-      const { error } = await supabase.storage.from("mockups").upload(path, file, { upsert: true });
+      const { error } = await supabase.storage.from("mockups").upload(path, file, { upsert: true, contentType: "text/html" });
       if (error) { alert("Erro no upload"); return; }
       const { data: pubData } = supabase.storage.from("mockups").getPublicUrl(path);
       await supabase.from("versions").insert({
@@ -188,7 +188,7 @@ export default function ProjectPage() {
               )}
               <iframe ref={iframeRef} onLoad={() => setIframeLoaded(true)}
                 src={supabase.storage.from("mockups").getPublicUrl(currentVersion.storage_path).data.publicUrl}
-                className="w-full h-full border-0" sandbox="allow-same-origin"
+                className="w-full h-full border-0" sandbox="allow-scripts"
                 style={{ pointerEvents: "none" }} />
               <div className="absolute inset-0 cursor-crosshair" onClick={handleIframeClick} />
             </>
